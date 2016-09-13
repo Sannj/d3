@@ -18,7 +18,7 @@ $(document).ready(function () {
         var j = data
         var yy = {};
         var i = 0;
-        for(key in data){
+        for (key in data) {
             yy[i] = parseFloat(data[key])
             i++;
         }
@@ -26,37 +26,47 @@ $(document).ready(function () {
             return d.value
         })
 
-        var width = 420,
-            barHeight = 20;
-
-        var x = d3.scale.linear()
-            .domain([0, maxValue])
-            .range([0, width]);
-
         var len = Object.keys(data).length
+
+        var width = 60,
+            height = 500;
+
+        var y = d3.scale.linear()
+            .range([height, 0]);
 
         var chart = d3.select(".chart")
             .attr("width", width)
-            .attr("height", barHeight * len);
+            .attr("height", height);
 
+        y.domain([0, maxValue]);
+
+        var barWidth = width / len;
 
         var bar = chart.selectAll("g")
             .data(d3.values(data))
             .enter().append("g")
-            .attr("transform", function(d, i) {
-                return "translate(0," + i * barHeight + ")"; });
+            .attr("transform", function (d, i) {
+                return "translate(" + i * barWidth + ",0)";
+            });
 
         bar.append("rect")
-            .attr("width", x)
-            .attr("height", barHeight - 1);
+            .attr("y", function (d) {
+                return y(d);
+            })
+            .attr("height", function (d) {
+                return height - y(d);
+            })
+            .attr("width", barWidth - 1);
 
         bar.append("text")
-            .attr("x", function(d) {
-                return x(d) - 3; })
-            .attr("y", barHeight / 2)
-            .attr("dy", ".35em")
-            .text(function(d) {
-                return d; });
+            .attr("x", barWidth / 2)
+            .attr("y", function (d) {
+                return y(d) + 3;
+            })
+            .attr("dy", ".75em")
+            .text(function (d) {
+                return d;
+            });
 
     }
 
