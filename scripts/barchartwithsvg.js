@@ -28,7 +28,7 @@ $(document).ready(function () {
 
         var len = Object.keys(data).length
 
-        var width = 60,
+        var width = 660,
             height = 500;
 
         var y = d3.scale.linear()
